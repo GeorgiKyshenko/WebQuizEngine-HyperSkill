@@ -1,14 +1,21 @@
 package engine.services;
 
-import engine.models.AnswerResponse;
-import engine.models.QuizResponse;
+import engine.exceptions.QuizNotFound;
+import engine.models.requests.NewQuizRequest;
+import engine.models.responses.AnswerResponse;
+import engine.models.responses.QuizResponse;
+import engine.repositories.QuizRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
+
+    private final QuizRepository quizRepository;
+
     @Override
     public QuizResponse returnQuiz() {
         return QuizResponse.builder()
@@ -28,5 +35,15 @@ public class QuizServiceImpl implements QuizService {
                         .success(false)
                         .feedback("Wrong answer! Please, try again.")
                         .build();
+    }
+
+    @Override
+    public NewQuizRequest save(NewQuizRequest quiz) {
+        return quizRepository.addQuiz(quiz.getTitle(), quiz.getText(), quiz.getOptions(), quiz.getAnswer());
+    }
+
+    @Override
+    public NewQuizRequest findQuizById(long id) throws QuizNotFound {
+        return quizRepository.getQuizById(id);
     }
 }
