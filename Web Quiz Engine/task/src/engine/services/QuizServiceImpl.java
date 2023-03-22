@@ -25,8 +25,9 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public AnswerResponse sendFeedback(int answer) {
-        return answer == 2 ?
+    public AnswerResponse sendFeedback(long id, int answer) throws QuizNotFound {
+        NewQuizRequest quizById = quizRepository.getQuizById(id);
+        return quizById.getAnswer() == answer ?
                 AnswerResponse.builder()
                         .success(true)
                         .feedback("Congratulations, you're right!")
@@ -45,5 +46,10 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public NewQuizRequest findQuizById(long id) throws QuizNotFound {
         return quizRepository.getQuizById(id);
+    }
+
+    @Override
+    public List<NewQuizRequest> retrieveALlQuizzes() {
+        return quizRepository.getAllQuizzes();
     }
 }

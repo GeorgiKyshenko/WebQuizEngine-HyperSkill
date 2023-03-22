@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -23,10 +25,10 @@ public class QuizController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/quiz")
-    // request should be like this -> http://localhost:8080/api/quiz?answer=2  with question mark after quiz!!!
-    public ResponseEntity<AnswerResponse> feedback(@RequestParam int answer) {
-        AnswerResponse response = quizService.sendFeedback(answer);
+    @PostMapping("/quizzes/{id}/solve")
+    // request should be like this -> http://localhost:8080/api/quizzes/1/solve?answer=2  with question mark after quiz!!!
+    public ResponseEntity<AnswerResponse> feedback(@PathVariable long id, @RequestParam int answer) throws QuizNotFound {
+        AnswerResponse response = quizService.sendFeedback(id, answer);
         return ResponseEntity.ok().body(response);
     }
 
@@ -40,6 +42,12 @@ public class QuizController {
     public ResponseEntity<NewQuizRequest> getQuiz(@PathVariable long id) throws QuizNotFound {
         NewQuizRequest quiz = quizService.findQuizById(id);
         return ResponseEntity.ok().body(quiz);
+    }
+
+    @GetMapping("/quizzes")
+    public ResponseEntity<List<NewQuizRequest>> allQuizzes() {
+        List<NewQuizRequest> listOfQuizzes = quizService.retrieveALlQuizzes();
+        return ResponseEntity.ok().body(listOfQuizzes);
     }
 
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -28,5 +29,9 @@ public class QuizRepository {
         } catch (Exception exception) {
             throw new QuizNotFound("Quiz not found. Try new ID!");
         }
+    }
+
+    public List<NewQuizRequest> getAllQuizzes() {
+        return Collections.unmodifiableList(quizzes);
     }
 }
