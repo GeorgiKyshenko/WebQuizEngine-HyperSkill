@@ -1,11 +1,10 @@
 package engine.models.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import engine.models.Answer;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.Nullable;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -18,10 +17,12 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Slf4j(topic = "NewQuizRequest - class")
-//@Component
+@Entity
+@Table(name = "quizzes")
 public class NewQuizRequest {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
     @NotBlank
@@ -32,11 +33,21 @@ public class NewQuizRequest {
     private String text;
     @Size(min = 2)
     @NotNull
+//    @CollectionTable(name = "options")
+    @ElementCollection
     private List<String> options;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ElementCollection
     private Set<Integer> answer;
 
-//    @PostConstruct
+    public NewQuizRequest(String title, String text, List<String> options, Set<Integer> answer) {
+        this.title = title;
+        this.text = text;
+        this.options = options;
+        this.answer = answer;
+    }
+
+    //    @PostConstruct
 //    public void checkValue() {
 //        log.info(Arrays.toString(answer));
 //    }

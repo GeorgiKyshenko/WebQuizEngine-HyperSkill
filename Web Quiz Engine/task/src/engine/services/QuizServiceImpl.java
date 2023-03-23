@@ -1,7 +1,7 @@
 package engine.services;
 
 import engine.exceptions.QuizNotFound;
-import engine.models.Answer;
+import engine.models.requests.Answer;
 import engine.models.requests.NewQuizRequest;
 import engine.models.responses.AnswerResponse;
 import engine.models.responses.QuizResponse;
@@ -29,7 +29,7 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public AnswerResponse sendFeedback(long id, Answer answer) throws QuizNotFound {
-        NewQuizRequest quiz = quizRepository.getQuizById(id);
+        NewQuizRequest quiz = quizRepository.findById(id).orElseThrow(() -> new QuizNotFound("Quiz with this Id does not exists!"));
         Set<Integer> quizAnswers = quiz.getAnswer();
 
 
@@ -89,16 +89,16 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public NewQuizRequest save(NewQuizRequest quiz) {
-        return quizRepository.addQuiz(quiz.getTitle(), quiz.getText(), quiz.getOptions(), quiz.getAnswer());
+        return quizRepository.save(quiz);
     }
 
     @Override
-    public NewQuizRequest findQuizById(long id) throws QuizNotFound {
-        return quizRepository.getQuizById(id);
+    public Optional<NewQuizRequest> findQuizById(long id) throws QuizNotFound {
+        return Optional.of(quizRepository.findById(id).orElseThrow(() -> new QuizNotFound("Quiz with this Id does not exists!")));
     }
 
     @Override
     public List<NewQuizRequest> retrieveALlQuizzes() {
-        return quizRepository.getAllQuizzes();
+        return quizRepository.findAll();
     }
 }

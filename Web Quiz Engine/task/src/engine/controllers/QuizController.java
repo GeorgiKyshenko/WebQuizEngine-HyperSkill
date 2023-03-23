@@ -2,7 +2,7 @@ package engine.controllers;
 
 
 import engine.exceptions.QuizNotFound;
-import engine.models.Answer;
+import engine.models.requests.Answer;
 import engine.models.requests.NewQuizRequest;
 import engine.models.responses.AnswerResponse;
 import engine.models.responses.QuizResponse;
@@ -13,8 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,8 +46,8 @@ public class QuizController {
     }
 
     @GetMapping("/quizzes/{id}")
-    public ResponseEntity<NewQuizRequest> getQuiz(@PathVariable long id) throws QuizNotFound {
-        NewQuizRequest quiz = quizService.findQuizById(id);
+    public ResponseEntity<Optional<NewQuizRequest>> getQuiz(@PathVariable long id) throws QuizNotFound {
+        Optional<NewQuizRequest> quiz = quizService.findQuizById(id);
         return ResponseEntity.ok().body(quiz);
     }
 

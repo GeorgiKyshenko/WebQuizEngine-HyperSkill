@@ -1,10 +1,8 @@
 package engine.repositories;
 
-import engine.exceptions.BusinessException;
 import engine.exceptions.QuizNotFound;
-import engine.models.Answer;
 import engine.models.requests.NewQuizRequest;
-import lombok.Getter;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -14,17 +12,24 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 @Repository
-public class QuizRepository {
-    private List<NewQuizRequest> quizzes = new ArrayList<>();
-    private static long id = 0;
+public interface QuizRepository extends JpaRepository<NewQuizRequest, Long> {
 
-    public NewQuizRequest addQuiz(String title, String text, List<String> options, Set<Integer> answer) {
-        NewQuizRequest quiz = new NewQuizRequest(++id, title, text, options, answer);
+
+
+    /**
+     * Hardcoded methods of the previous stage before connecting to the DB, when QuizRepository was a class.
+     * I keep them just in case
+     * @return
+     */
+
+    List<NewQuizRequest> quizzes = new ArrayList<>();
+    default NewQuizRequest addQuiz(String title, String text, List<String> options, Set<Integer> answer) {
+        NewQuizRequest quiz = new NewQuizRequest(title, text, options, answer);
         quizzes.add(quiz);
         return quiz;
     }
 
-    public NewQuizRequest getQuizById(long id) throws QuizNotFound {
+    default NewQuizRequest getQuizById(long id) throws QuizNotFound {
         try {
             Predicate<? super NewQuizRequest> predicate = quiz -> quiz.getId() == id;
             return quizzes.stream().filter(predicate).findFirst().orElseThrow();
@@ -33,7 +38,7 @@ public class QuizRepository {
         }
     }
 
-    public List<NewQuizRequest> getAllQuizzes() {
+    default List<NewQuizRequest> getAllQuizzes() {
         return Collections.unmodifiableList(quizzes);
     }
 }

@@ -1,4 +1,4 @@
-package engine.models;
+package engine.models.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

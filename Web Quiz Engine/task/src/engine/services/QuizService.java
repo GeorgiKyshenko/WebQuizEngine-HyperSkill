@@ -1,12 +1,13 @@
 package engine.services;
 
 import engine.exceptions.QuizNotFound;
-import engine.models.Answer;
+import engine.models.requests.Answer;
 import engine.models.requests.NewQuizRequest;
 import engine.models.responses.AnswerResponse;
 import engine.models.responses.QuizResponse;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface QuizService {
     QuizResponse returnQuiz();
@@ -15,7 +16,7 @@ public interface QuizService {
 
     NewQuizRequest save(NewQuizRequest quiz);
 
-    NewQuizRequest findQuizById(long id) throws QuizNotFound;
+    Optional<NewQuizRequest> findQuizById(long id) throws QuizNotFound;
 
     List<NewQuizRequest> retrieveALlQuizzes();
 }
