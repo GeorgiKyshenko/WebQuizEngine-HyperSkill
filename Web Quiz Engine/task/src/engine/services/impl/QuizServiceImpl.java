@@ -1,4 +1,4 @@
-package engine.services;
+package engine.services.impl;
 
 import engine.exceptions.QuizNotFound;
 import engine.models.requests.Answer;
@@ -6,6 +6,7 @@ import engine.models.requests.NewQuizRequest;
 import engine.models.responses.AnswerResponse;
 import engine.models.responses.QuizResponse;
 import engine.repositories.QuizRepository;
+import engine.services.QuizService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
