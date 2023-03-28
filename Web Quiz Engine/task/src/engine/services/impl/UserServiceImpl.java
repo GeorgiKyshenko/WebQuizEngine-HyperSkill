@@ -22,6 +22,7 @@ public class UserServiceImpl implements UserService {
         if (userByEmail.isEmpty()) {
             User userToSave = User.builder().email(user.getEmail())
                     .password(passwordEncoder.encode(user.getPassword()))
+                    .role("ROLE_USER")
                     .build();
             userRepository.save(userToSave);
         } else {
